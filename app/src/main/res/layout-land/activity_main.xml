@@ -21,18 +21,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/operation"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/newNumber"
+            app:layout_constraintEnd_toStartOf="@id/button7"
             app:layout_constraintTop_toTopOf="@+id/newNumber" app:layout_constraintHorizontal_bias="0.5"
             android:textStyle="bold" android:textSize="18sp"
-            app:layout_constraintBaseline_toBaselineOf="@id/newNumber"/>
+            app:layout_constraintBaseline_toBaselineOf="@id/button7"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="numberSigned|numberDecimal"
             android:ems="10"
             android:id="@+id/newNumber"
-            app:layout_constraintTop_toBottomOf="@+id/result" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toStartOf="@+id/result" app:layout_constraintBaseline_toBaselineOf="@+id/result"/>
     <Button
             android:text="0"
             android:layout_width="wrap_content"
