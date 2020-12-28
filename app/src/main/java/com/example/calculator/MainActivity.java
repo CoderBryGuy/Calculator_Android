@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,26 +15,52 @@ public class MainActivity extends AppCompatActivity {
     private EditText newNumber;
     private TextView displayOperation;
 
+    private final static String OPERAND1 = "operand1";
+    private final static String OPERAND2 = "operand2";
+    private final static String PENDING_OPERATION = "pendingOperation";
+
+
     //Variables to hold the operands and types of calculations
     private Double operand1 = null;
+    private Double operand2 = null;
     private String pendingOperation = "=";
 
     @Override
     public void onRestoreInstanceState(@Nullable Bundle savedInstanceState) {
+
         super.onRestoreInstanceState(savedInstanceState);
+        operand1 = savedInstanceState.getDouble(OPERAND1, 0.0d);
+        operand2 = savedInstanceState.getDouble(OPERAND2, 0.0d);
+
+        if (operand2 != 0.0d) {
+            newNumber.setText(String.valueOf(operand2));
+        }
+
+        pendingOperation = savedInstanceState.getString(PENDING_OPERATION, "=");
+        displayOperation.setText(pendingOperation);
     }
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        if(operand1 != null) {
+            outState.putDouble(OPERAND1, operand1);
+        }
+        if(operand2 != null) {
+            outState.putDouble(OPERAND2, operand2);
+        }
+        outState.putString(PENDING_OPERATION, pendingOperation);
 
-//        savedInstanceState.putString();
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // == use this logic to solve challenge ==
+//        Double myDouble = Double.valueOf("-2.0");
+//        Log.i("myDouble: ", String.valueOf(myDouble));
 
         result = (EditText) findViewById(R.id.result);
         newNumber = (EditText) findViewById(R.id.newNumber);
@@ -79,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         buttonDot.setOnClickListener(listener);
 
         View.OnClickListener opListener = new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 Button b = (Button) view;
@@ -107,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         if (null == operand1) {
             operand1 = value;
         } else {
+            operand2 = value;
 
             if (pendingOperation.equals("=")) {
                 pendingOperation = operation;
@@ -114,24 +143,25 @@ public class MainActivity extends AppCompatActivity {
 
             switch (pendingOperation) {
                 case "=":
-                    operand1 = value;
+                    operand1 = operand2;
                     break;
                 case "/":
                     if (value == 0) {
                         operand1 = 0.0;
                     } else {
-                        operand1 /= value;
+                        operand1 /= operand2;
                     }
                     break;
                 case "*":
-                    operand1 *= value;
+                    operand1 *= operand2;
                     break;
                 case "-":
-                    operand1 -= value;
+                    operand1 -= operand2;
                     break;
                 case "+":
-                    operand1 += value;
+                    operand1 += operand2;
             }
+            operand2 = 0.0d;
         }
 
         result.setText(operand1.toString());
