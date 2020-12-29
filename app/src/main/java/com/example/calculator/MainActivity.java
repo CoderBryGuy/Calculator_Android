@@ -1,6 +1,7 @@
 package com.example.calculator;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // == use this logic to solve challenge ==
-//        Double myDouble = Double.valueOf("-2.0");
+//        Dou1  `ble myDouble = Double.valueOf("-2.0");
 //        Log.i("myDouble: ", String.valueOf(myDouble));
 
         result = (EditText) findViewById(R.id.result);
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         Button buttonMultiply = (Button) findViewById(R.id.buttonMultiply);
         Button buttonMinus = (Button) findViewById(R.id.buttonMinus);
         Button buttonPlus = (Button) findViewById(R.id.buttonPlus);
+
+        Button buttonNegative = (Button)findViewById(R.id.negativeButton);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -128,6 +131,37 @@ public class MainActivity extends AppCompatActivity {
         buttonMultiply.setOnClickListener(opListener);
         buttonMinus.setOnClickListener(opListener);
         buttonPlus.setOnClickListener(opListener);
+
+        View.OnClickListener negButtonListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String operand = newNumber.getText().toString();
+
+                if (operand.length() == 1 && operand.equals(".")){
+                operand = "";
+                }
+
+                if(operand.length() > 0) {
+                    if (operand.charAt(0) == '-') {
+                        //== make positive ==
+                        Log.i("operand before being made positive: ", operand);
+                        operand = operand.substring(1, operand.length());
+                    } else {
+                        //== make negative ==
+                        Log.i("operand before being made negative: ", operand);
+                        operand = "-" + operand;
+                    }
+                }else {
+                    //== if null set to neg ===
+                    operand = "-";
+                }
+
+                newNumber.setText(operand);
+            }
+        };
+
+        buttonNegative.setOnClickListener(negButtonListener);
 
     }
 
